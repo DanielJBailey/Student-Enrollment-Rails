@@ -7,6 +7,8 @@ class EnrollmentsController < ApplicationController
   end
 
   def new
+    # grab every user in our database except the ones in our course
+    @users = User.all - @course.users
     @enrollment = @course.enrollments.new
   end
 
@@ -20,8 +22,9 @@ class EnrollmentsController < ApplicationController
   end
 
   def destroy
-    @course.enrollments.find(params[:id]).destroy
-    # redirect_to course_users_path
+    enrollment = @course.enrollments.find(params[:id])
+    enrollment.destroy
+    redirect_to course_enrollments_path(@course)
   end
 
   private
